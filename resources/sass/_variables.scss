@@ -1,0 +1,82 @@
+// Body
+$body-bg: #ecf0f5;
+
+.padding10 {
+  padding: 10px !important;
+}
+
+.paddingTop10 {
+  padding-top: 10px !important;
+}
+
+.paddingTop10 {
+  padding-top: 10px !important;
+}
+
+.padding-bottom-10{
+  padding-bottom: 10px !important;
+}
+
+.border-body{
+  border-bottom: 15px solid $body-bg;
+ }
+
+.paddingTop20 {
+  padding-top: 20px !important;
+}
+
+body {
+  background: $body-bg;
+  padding: 0px;
+  margin: 0px;
+}
+
+.view-container {
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  width: 100vw;
+}
+
+.top-container {
+  flex-direction: column;
+}
+
+.left-container {
+  > .el-menu-item, .el-submenu__title {
+    height: 50px !important;
+    line-height: 50px !important;
+  }
+
+  > .el-menu {
+    border-right: none !important;
+  }
+}
+
+.main-container {
+  padding: 10px 10px 5px 10px;
+  flex-direction: column;
+}
+
+// 滚动条
+.scrollbar::-webkit-scrollbar:horizontal {
+  height: 24px;
+  background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 1px;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #ebeef5;
+}
+
+.scrollbar ::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #ebeef5;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #C6E2FF;
+}
