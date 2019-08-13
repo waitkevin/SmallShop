@@ -26,6 +26,8 @@ class CreateSystemUsersTable extends Migration
             $table->unsignedTinyInteger('status')->default(1)->comment('用户状态:1=正常,2=异常');
             $table->unsignedInteger('role_id')->default(0)->comment('系统角色ID');
             $table->softDeletes()->comment('软删除标识');
+            $table->dateTime('created_at')->comment('创建时间');
+            $table->dateTime('updated_at')->comment('更新时间');
 
             $table->unique('username');
 
