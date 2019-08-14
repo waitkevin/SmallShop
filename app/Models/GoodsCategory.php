@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Kalnoy\Nestedset\NodeTrait;
-use Illuminate\Database\Eloquent\Model;
+
 
 /**
  * 商品分类
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class GoodsCategory
  * @package App\Models
  */
-class GoodsCategory extends Model
+class GoodsCategory extends BasicModel
 {
     use NodeTrait;
 
@@ -23,6 +23,7 @@ class GoodsCategory extends Model
 
 
     /**
+     * The blacklist
      * @var array
      */
     protected $guarded = [];

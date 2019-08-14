@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\System;
 
 
-use App\Http\Requests\System\NodeStorageRequest;
+use App\Http\Requests\System\NodeRequest;
+use App\Models\SystemNode;
+use App\Services\Common\ResponseServices;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 系统权限管理
@@ -13,9 +16,46 @@ use App\Http\Requests\System\NodeStorageRequest;
  */
 class NodeController extends BasicController
 {
-    public function storage(NodeStorageRequest $request)
+    /**
+     * 添加|编辑 权限节点
+     *
+     * @param NodeRequest $request
+     * @return array
+     */
+    public function storage(NodeRequest $request)
     {
-        return $request->all();
+        $request->validate();
+        $params = $request->only(['name', 'router', 'icons', 'mark', 'sort', 'type', 'status', 'parent_id']);
 
+        try {
+            DB::transaction(function () use ($request, $params) {
+
+                if ($request->filled('parent_id')) {
+                    $parentNode = SystemNode::where('id', $request->parent_id)->first();
+                    $response = $request->id
+                        ? $parentNode->appendNode(SystemNode::where('id', $request->id)->first())
+                        : $parentNode->children()->create($params);
+
+                } else {
+                    $response = $request->id
+                        ? SystemNode::where(['id' => $request->id])->first()->makeRoot()->save()
+                        : SystemNode::create($params);
+                }
+
+                if (!$response)
+                    throw new \Exception('操作失败');
+
+            }, 2);
+
+            return ResponseServices::success('操作成功');
+        } catch (\Exception $exception) {
+
+            return ResponseServices::error('操作失败');
+        }
     }
+
+
+
+
+//    public function
 }

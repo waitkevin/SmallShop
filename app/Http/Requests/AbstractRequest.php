@@ -34,7 +34,7 @@ class AbstractRequest extends FormRequest
      * 是否自动验证
      * @var bool
      */
-    public $autoValidate = true;
+    public $autoValidate = false;
 
 
     /**
@@ -119,7 +119,7 @@ class AbstractRequest extends FormRequest
         if ($this->extendRules) {
             $extendRules = array_reverse($this->extendRules);
             foreach ($extendRules as $extendRule) {
-                if (method_exists([$this, "{$extendRule}Rules"])) {
+                if (method_exists($this, "{$extendRule}Rules")) {
                     $rules = array_merge($rules, $this->container->call(
                         [$this, "{$extendRule}Rules"]
                     ));

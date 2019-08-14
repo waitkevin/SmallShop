@@ -2,11 +2,19 @@
 
 namespace App\Http\Requests\System;
 
+
 use App\Models\SystemNode;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\AbstractRequest;
 
-class NodeStorageRequest extends AbstractRequest
+
+/**
+ * 系统权限节点验证类
+ *
+ * Class NodeRequest
+ * @package App\Http\Requests\System
+ */
+class NodeRequest extends AbstractRequest
 {
     /**
      * 场景值
@@ -53,7 +61,9 @@ class NodeStorageRequest extends AbstractRequest
     public function messages()
     {
         return [
+            'id.required' => '权限节点ID必须填写',
             'id.exists' => '权限节点信息不存在',
+            'id.numeric' => '权限节点ID格式必须为数字',
 
             'name.required' => '权限路由名称必须填写',
             'name.max' => '权限路由名称最大长度为50',
@@ -82,13 +92,18 @@ class NodeStorageRequest extends AbstractRequest
     }
 
 
-
-//    public function passwordRules()
-//    {
-//        return [
-//            'password' => [
-//                'required', 'min:6', 'max:16', 'different:$old_password'      //修改新密码不和旧密码相同，此处只是举例子，因为密码需要Hash处理才能判断是否相同
-//            ]
-//        ];
-//    }
+    /**
+     * 验证数据是否存在
+     *
+     * @param SystemNode $systemNode
+     * @return array
+     */
+    public function idRules(SystemNode $systemNode)
+    {
+        return [
+            'id' => [
+                'required', 'numeric', Rule::exists($systemNode->getTable()),
+            ]
+        ];
+    }
 }
