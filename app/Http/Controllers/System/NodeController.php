@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\System;
 
 
-use App\Http\Requests\System\NodeRequest;
 use App\Models\SystemNode;
-use App\Services\Common\ResponseServices;
 use Illuminate\Support\Facades\DB;
+use App\Services\Common\ResponseServices;
+use App\Http\Requests\System\NodeRequest;
+use App\Http\Resources\System\NodeCollection;
 
 /**
  * 系统权限管理
@@ -49,13 +50,30 @@ class NodeController extends BasicController
 
             return ResponseServices::success('操作成功');
         } catch (\Exception $exception) {
-
             return ResponseServices::error('操作失败');
         }
     }
 
 
+    /**
+     * 删除权限节点
+     *
+     * @param NodeRequest $request
+     * @return array
+     */
+    public function destroy(NodeRequest $request)
+    {
+        $request->with('id')->validate('destroy');
+        $node = SystemNode::where('id', $request->id)->first();
+        if ($node->descendants->isEmpty && $node->delete())
+            return ResponseServices::success('删除权限成功');
+
+        return ResponseServices::error('权限存在子级节点或删除失败');
+    }
 
 
-//    public function
+    public function show()
+    {
+        return ResponseServices::success('success', new NodeCollection(SystemNode::paginate(10)));
+    }
 }

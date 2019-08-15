@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['namespace' => 'System', 'prefix' => 'system'], function () {
+    Route::post('node/storage', 'NodeController@storage');
+    Route::post('node/destroy', 'NOdeController@destroy');
+    Route::get('node/show',     'NodeController@show');
 
-    Route::get('node/storage', 'NodeController@storage');
 });

@@ -21,7 +21,7 @@ class NodeRequest extends AbstractRequest
      * @var array
      */
     public $scenes = [
-        'id' => 'id',
+        'destroy' => 'id',
         'name'   => 'name',
         'router' => 'router',
         'icons'  => 'icons',
