@@ -14,12 +14,12 @@ class ResponseServices
      * 成功响应方法
      *
      * @param string $message
-     * @param null|string|array $data
+     * @param null $data
      * @param int $code
-     * @param null|string|array $other
+     * @param null $other
      * @param int $httpCode
      * @param array $header
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public static function success($message = 'success', $data = null, $code = 1, $other = null, $httpCode = 200, $header = [])
     {
@@ -41,7 +41,7 @@ class ResponseServices
      * @param null $other
      * @param int $httpCode
      * @param array $header
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public static function error($message = 'failure', $data = null, $code = 0, $other = null, $httpCode = 200, $header = [])
     {

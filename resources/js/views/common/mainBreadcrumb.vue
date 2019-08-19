@@ -1,12 +1,11 @@
 <template>
     <div>
         <el-row class="main-breadcrumb">
-            <el-col :xs="6" :sm="6" :md="24" :lg="12" :xl="12"><b>系统菜单管理</b></el-col>
+            <el-col :xs="6" :sm="6" :md="24" :lg="12" :xl="12"><b>{{ $store.state.crumbs[0]? $store.state.crumbs[0] : '首页'}}</b></el-col>
             <el-col :xs="18" :sm="18" :md="24" :lg="12" :xl="12" hidden-md-only>
-                <el-breadcrumb separator="/" class="crumbs">
+                <el-breadcrumb class="crumbs">
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item>系统菜单管理</el-breadcrumb-item>
-                    <el-breadcrumb-item>系统菜单列表</el-breadcrumb-item>
+                    <el-breadcrumb-item v-for="(item, index) in $store.state.crumbs" :key="index">{{item}}</el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>
         </el-row>
@@ -27,7 +26,6 @@
         font-family: "Microsoft YaHei";
         border-radius: 3px;
     }
-
     .crumbs {
         float: right;
         font-size: 14px;
@@ -47,6 +45,4 @@
     .tree-font .el-tree-node__expand-icon {
         font-size: 16px;
     }
-
-
 </style>
