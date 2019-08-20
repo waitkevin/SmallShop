@@ -4,6 +4,7 @@
                  :text-color="menuTextColor"
                  :active-text-color="activeMenuTextColor"
                  :unique-opened="uniqueOpened"
+                 :default-active="active"
                  class="el-menu-vertical-demo"
                  @select="handleSelect">
 
@@ -34,10 +35,15 @@
                 uniqueOpened: true,
                 menus: [],
                 crumb: [],
+                active: '',
             }
         },
-        created: function() {
-            this.menuTree();
+        created(){
+            this.$nextTick(() => {
+                if(window.sessionStorage.getItem('active_menu')){
+                    this.active = sessionStorage.getItem('active_menu');
+                }
+            })
         },
         methods: {
             menuTree() {
@@ -49,14 +55,21 @@
                 this.crumb = [];
                 let [x, y] = key.split('-');
                 this.crumb.push(this.menus[x].name, this.menus[x].children[y].name);
-                this.$store.commit('setCrumbs', {crumbs: this.crumb})
-                console.log(this.crumb)
+                this.$store.commit('setCrumbs', {crumbs: this.crumb});
 
+                this.active = key;
+                sessionStorage.setItem('active_menu', key);
+                sessionStorage.setItem('user_menu', this.crumb);
 
-
-
+                this.$router.push({name: this.menus[x].children[y].router});
             }
-        }
+        },
+        mounted:function(){
+            this.menuTree();
+            this.$store.commit('setCrumbs', {
+                crumbs: sessionStorage.getItem('user_menu').split(',')
+            })
+        },
     }
 </script>
 
