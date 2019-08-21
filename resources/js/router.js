@@ -22,11 +22,6 @@ const router = new Router({
             component: Layout,
             children: [
                 {
-                    path: '/system/member/list',
-                    name: '/system/member/list',
-                    component: SystemUser,
-                },
-                {
                     path: '/system/node/show',
                     name: '/system/node/show',
                     component: SystemNode,

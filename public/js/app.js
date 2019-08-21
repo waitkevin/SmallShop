@@ -3599,6 +3599,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _api_nodes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/nodes */ "./resources/js/api/nodes.js");
 //
 //
 //
@@ -3650,19 +3651,56 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "node",
   data: function data() {
     return {
-      nodeType: [{
-        title: '菜单节点',
-        value: 1
-      }, {
-        title: '操作节点',
-        value: 2
-      }],
-      value: ''
+      nodeData: [],
+      where: {
+        name: '',
+        router: '',
+        type: '',
+        status: ''
+      }
     };
+  },
+  created: function created() {
+    this.nodes();
+  },
+  methods: {
+    handleChildren: function handleChildren(tree, treeNode, resolve) {
+      _api_nodes__WEBPACK_IMPORTED_MODULE_0__["default"].show({
+        parent_id: tree.id
+      }).then(function (res) {
+        if (res.code == 1) {
+          console.log(res);
+          resolve(res.data.list);
+        }
+      });
+    },
+    nodes: function nodes() {
+      var _this = this;
+
+      _api_nodes__WEBPACK_IMPORTED_MODULE_0__["default"].show(this.where).then(function (res) {
+        if (res.code = 1) {
+          _this.nodeData = res.data.list;
+        }
+      });
+    }
   }
 });
 
@@ -64481,7 +64519,14 @@ var render = function() {
             { staticClass: "padding-bottom-10", attrs: { span: 3 } },
             [
               _c("el-input", {
-                attrs: { size: "small", placeholder: "请输入权限名称查询" }
+                attrs: { size: "small", placeholder: "请输入权限名称查询" },
+                model: {
+                  value: _vm.where.name,
+                  callback: function($$v) {
+                    _vm.$set(_vm.where, "name", $$v)
+                  },
+                  expression: "where.name"
+                }
               })
             ],
             1
@@ -64492,7 +64537,14 @@ var render = function() {
             { staticClass: "padding-bottom-10", attrs: { span: 3 } },
             [
               _c("el-input", {
-                attrs: { size: "small", placeholder: "请输入权限路由查询" }
+                attrs: { size: "small", placeholder: "请输入权限路由查询" },
+                model: {
+                  value: _vm.where.router,
+                  callback: function($$v) {
+                    _vm.$set(_vm.where, "router", $$v)
+                  },
+                  expression: "where.router"
+                }
               })
             ],
             1
@@ -64507,19 +64559,45 @@ var render = function() {
                 {
                   attrs: { size: "small", placeholder: "选择权限类型" },
                   model: {
-                    value: _vm.value,
+                    value: _vm.where.type,
                     callback: function($$v) {
-                      _vm.value = $$v
+                      _vm.$set(_vm.where, "type", $$v)
                     },
-                    expression: "value"
+                    expression: "where.type"
                   }
                 },
-                _vm._l(_vm.nodeType, function(item) {
-                  return _c("el-option", {
-                    key: item.value,
-                    attrs: { label: item.title, value: item.value }
-                  })
-                }),
+                [
+                  _c("el-option", { attrs: { label: "菜单节点", value: "1" } }),
+                  _vm._v(" "),
+                  _c("el-option", { attrs: { label: "操作节点", value: "2" } })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "el-col",
+            { staticClass: "padding-bottom-10", attrs: { span: 2 } },
+            [
+              _c(
+                "el-select",
+                {
+                  attrs: { size: "small", placeholder: "选择权限状态" },
+                  model: {
+                    value: _vm.where.status,
+                    callback: function($$v) {
+                      _vm.$set(_vm.where, "status", $$v)
+                    },
+                    expression: "where.status"
+                  }
+                },
+                [
+                  _c("el-option", { attrs: { label: "显示", value: "1" } }),
+                  _vm._v(" "),
+                  _c("el-option", { attrs: { label: "隐藏", value: "2" } })
+                ],
                 1
               )
             ],
@@ -64554,36 +64632,83 @@ var render = function() {
         [
           _c(
             "el-col",
-            {
-              staticClass: "menu-table",
-              attrs: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24 }
-            },
+            { staticClass: "menu-table", attrs: { span: 24 } },
             [
               _c(
                 "el-table",
-                { staticStyle: { width: "100%" } },
+                {
+                  staticStyle: { width: "100%" },
+                  attrs: {
+                    "row-key": "id",
+                    data: _vm.nodeData,
+                    lazy: "",
+                    load: _vm.handleChildren,
+                    "tree-props": {
+                      children: "children",
+                      hasChildren: "hasChildren"
+                    }
+                  }
+                },
                 [
+                  _c("el-table-column", { attrs: { label: "ID", prop: "id" } }),
+                  _vm._v(" "),
                   _c("el-table-column", {
-                    attrs: { type: "selection", width: "55" }
+                    attrs: { label: "权限节点名称", prop: "name" }
                   }),
                   _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "菜单名称" } }),
+                  _c("el-table-column", {
+                    attrs: { label: "权限节点路由", prop: "router" }
+                  }),
                   _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "菜单描述" } }),
+                  _c("el-table-column", {
+                    attrs: { label: "权限节点图标", prop: "icons" }
+                  }),
                   _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "菜单路由" } }),
+                  _c("el-table-column", {
+                    attrs: { label: "权限节点备注", prop: "mark" }
+                  }),
                   _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "菜单图标" } }),
+                  _c("el-table-column", {
+                    attrs: { label: "权限节点类型", prop: "type" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(scope) {
+                          return [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(
+                                  scope.row.type == 1 ? "菜单节点" : "操作节点"
+                                )
+                              )
+                            ])
+                          ]
+                        }
+                      }
+                    ])
+                  }),
                   _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "PARENTID" } }),
+                  _c("el-table-column", {
+                    attrs: { label: "节点状态", prop: "status" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(scope) {
+                          return [
+                            _c("span", [
+                              _vm._v(
+                                _vm._s(scope.row.status == 1 ? "显示" : "隐藏")
+                              )
+                            ])
+                          ]
+                        }
+                      }
+                    ])
+                  }),
                   _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "菜单状态" } }),
-                  _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "创建者" } }),
-                  _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "创建时间" } }),
-                  _vm._v(" "),
-                  _c("el-table-column", { attrs: { label: "管理" } })
+                  _c("el-table-column", {
+                    attrs: { label: "创建时间", prop: "created_at" }
+                  })
                 ],
                 1
               )
@@ -80727,6 +80852,37 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./resources/js/api/nodes.js":
+/*!***********************************!*\
+  !*** ./resources/js/api/nodes.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _common_axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/axios */ "./resources/js/common/axios.js");
+
+/**
+ * 系统权限列表
+ *
+ * @param params
+ * @return {AxiosPromise<any>}
+ */
+
+var show = function show() {
+  var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return _common_axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/node/show', {
+    params: params
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  show: show
+});
+
+/***/ }),
+
 /***/ "./resources/js/api/users.js":
 /*!***********************************!*\
   !*** ./resources/js/api/users.js ***!
@@ -80926,10 +81082,6 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
     path: '/',
     component: _views_layout_layout__WEBPACK_IMPORTED_MODULE_2__["default"],
     children: [{
-      path: '/system/member/list',
-      name: '/system/member/list',
-      component: _views_systemUser_systemUser__WEBPACK_IMPORTED_MODULE_3__["default"]
-    }, {
       path: '/system/node/show',
       name: '/system/node/show',
       component: _views_node_node__WEBPACK_IMPORTED_MODULE_5__["default"]

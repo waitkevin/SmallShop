@@ -4,6 +4,7 @@ namespace App\Http\Controllers\System;
 
 
 use App\Models\SystemNode;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\Common\ResponseServices;
 use App\Http\Requests\System\NodeRequest;
@@ -72,8 +73,20 @@ class NodeController extends BasicController
     }
 
 
-    public function show()
+    /**
+     * 系统权限列表
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Request $request)
     {
-        return ResponseServices::success('success', new NodeCollection(SystemNode::paginate(10)));
+        $response = SystemNode::where('parent_id', $request->parent_id?? null)
+            ->withCount('descendants')
+            ->orderBy('sort', 'desc')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        return ResponseServices::success('success', new NodeCollection($response));
     }
 }

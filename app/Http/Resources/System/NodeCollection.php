@@ -22,11 +22,6 @@ class NodeCollection extends ResourceCollection
     {
         return [
             'list' => $this->collection,
-            'page' => [
-                'size' => $this->count(),
-                'page' => $this->currentPage(),
-                'total' => $this->total(),
-            ]
         ];
     }
 }

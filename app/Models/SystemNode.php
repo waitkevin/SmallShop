@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 
 /**
@@ -28,4 +27,13 @@ class SystemNode extends BasicModel
      * @var array
      */
     protected $guarded = [];
+
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at'
+    ];
 }
