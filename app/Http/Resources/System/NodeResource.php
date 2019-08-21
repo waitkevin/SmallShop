@@ -17,7 +17,7 @@ class NodeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'router' => $this->name,
+            'router' => $this->router,
             'icons' => $this->icons,
             'sort' => $this->sort,
             'mark' => $this->mark,
