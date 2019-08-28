@@ -9,7 +9,7 @@ class NodeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -25,7 +25,7 @@ class NodeResource extends JsonResource
             'status' => $this->status,
             'created_at' => $this->created_at,
             'descendants_count' => $this->descendants_count,
-            'hasChildren' => $this->descendants_count? true : false,
+            'hasChildren' => $this->descendants_count ? true : false,
         ];
     }
 }

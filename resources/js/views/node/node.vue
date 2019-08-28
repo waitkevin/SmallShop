@@ -3,7 +3,6 @@
         <el-row class="padding10" :gutter="5">
             <el-col :span="24">
                 <el-button size="small" type="primary" icon="el-icon-edit">添加权限</el-button>
-                <el-button size="small" type="danger" icon="el-icon-delete">删除权限</el-button>
             </el-col>
         </el-row>
 
@@ -55,17 +54,28 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="创建时间" prop="created_at"></el-table-column>
+                    <el-table-column label="操作" width="160">
+                        <template slot-scope="scope">
+                            <el-button @click="handleDestroy(scope.row.id)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
+        <ModelBox :showModel="true"></ModelBox>
 
     </div>
 </template>
 
 <script>
+    import ModelBox from './addNode';
     import nodes from '../../api/nodes';
+    import tools from '../../common/tools';
     export default {
         name: "node",
+        components:{
+            ModelBox,
+        },
         data: function () {
             return {
                 nodeData: [],
@@ -74,24 +84,35 @@
                     router: '',
                     type: '',
                     status: '',
+                    // ModelBox: {
+                    //     showModel: false,
+                    //     callbackFn: () => {},
+                    //     editFormData: {}
+                    // }
                 },
             }
         },
         created(){
-            this.nodes();
+            this.handleNodes();
         },
         methods: {
+            handleDestroy(nodeId) {
+                nodes.destroy({id: nodeId}).then((res) => {
+                    tools.showMessage(res, () =>{
+                        this.handleNodes();
+                    });
+                }).then((err) => {});
+            },
             handleChildren(tree, treeNode, resolve) {
                 nodes.show({parent_id: tree.id}).then((res) => {
-                    if (res.code == 1) {
-                        console.log(res)
+                    if (res.code === 1) {
                         resolve(res.data.list);
                     }
                 });
             },
-            nodes() {
+            handleNodes() {
                 nodes.show(this.where).then((res) => {
-                    if (res.code = 1) {
+                    if (res.code === 1) {
                         this.nodeData = res.data.list;
                     }
                 })

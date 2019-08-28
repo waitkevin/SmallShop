@@ -63,7 +63,7 @@ class NodeRequest extends AbstractRequest
         return [
             'id.required' => '权限节点ID必须填写',
             'id.exists' => '权限节点信息不存在',
-            'id.numeric' => '权限节点ID格式必须为数字',
+            'id.numeric' => '权限节点格式错误',
 
             'name.required' => '权限路由名称必须填写',
             'name.max' => '权限路由名称最大长度为50',

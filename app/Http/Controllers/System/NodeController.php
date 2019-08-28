@@ -22,7 +22,7 @@ class NodeController extends BasicController
      * 添加|编辑 权限节点
      *
      * @param NodeRequest $request
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
     public function storage(NodeRequest $request)
     {
@@ -60,13 +60,13 @@ class NodeController extends BasicController
      * 删除权限节点
      *
      * @param NodeRequest $request
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(NodeRequest $request)
     {
         $request->with('id')->validate('destroy');
         $node = SystemNode::where('id', $request->id)->first();
-        if ($node->descendants->isEmpty && $node->delete())
+        if ($node->descendants->isEmpty() && $node->delete())
             return ResponseServices::success('删除权限成功');
 
         return ResponseServices::error('权限存在子级节点或删除失败');
