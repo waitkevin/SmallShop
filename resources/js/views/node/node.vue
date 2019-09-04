@@ -2,7 +2,7 @@
     <div>
         <el-row class="padding10" :gutter="5">
             <el-col :span="24">
-                <el-button size="small" type="primary" icon="el-icon-edit">添加权限</el-button>
+                <el-button size="small" type="primary" icon="el-icon-edit" @click="handleStorage(1)">添加权限</el-button>
             </el-col>
         </el-row>
 
@@ -54,15 +54,16 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="创建时间" prop="created_at"></el-table-column>
-                    <el-table-column label="操作" width="160">
+                    <el-table-column label="操作" min-width="60">
                         <template slot-scope="scope">
+                            <el-button @click="handleStorage(2, scope.row)" size="small" type="success" icon="el-icon-edit">编辑</el-button>
                             <el-button @click="handleDestroy(scope.row.id)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
-        <ModelBox :showModel="true"></ModelBox>
+        <ModelBox :showModel="showModel" :type="type" :storage="storage"></ModelBox>
 
     </div>
 </template>
@@ -79,16 +80,14 @@
         data: function () {
             return {
                 nodeData: [],
+                showModel: false,
+                storage: {},
+                type: 0,
                 where: {
                     name: '',
                     router: '',
                     type: '',
                     status: '',
-                    // ModelBox: {
-                    //     showModel: false,
-                    //     callbackFn: () => {},
-                    //     editFormData: {}
-                    // }
                 },
             }
         },
@@ -116,6 +115,11 @@
                         this.nodeData = res.data.list;
                     }
                 })
+            },
+            handleStorage(type, params = {}) {
+                this.showModel = true;
+                this.type = type;
+                this.storage = params;
             }
         }
     }

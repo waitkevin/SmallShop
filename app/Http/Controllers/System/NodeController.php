@@ -27,12 +27,14 @@ class NodeController extends BasicController
     public function storage(NodeRequest $request)
     {
         $request->validate();
-        $params = $request->only(['name', 'router', 'icons', 'mark', 'sort', 'type', 'status', 'parent_id']);
+        $params = $request->only(['name', 'router', 'icons', 'mark', 'sort', 'type', 'status', 'path']);
+        $params['parent_id'] = $request->parent_id = empty($params['path']) ? null : $params['path'][count($params['path']) - 1];
+        $params['path'] = implode(',', $params['path']);
 
         try {
             DB::transaction(function () use ($request, $params) {
 
-                if ($request->filled('parent_id')) {
+                if (!empty($request->parent_id)) {
                     $parentNode = SystemNode::where('id', $request->parent_id)->first();
                     $response = $request->id
                         ? $parentNode->appendNode(SystemNode::where('id', $request->id)->first())
@@ -71,6 +73,20 @@ class NodeController extends BasicController
 
         return ResponseServices::error('权限存在子级节点或删除失败');
     }
+
+
+    /**
+     * 全部权限节点树
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function all()
+    {
+        // TODO:: 可传入条件
+        $response = SystemNode::where([])->get()->toTree();
+        return ResponseServices::success('success', $response);
+    }
+
 
 
     /**
